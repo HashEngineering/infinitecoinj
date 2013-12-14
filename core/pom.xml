@@ -21,14 +21,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google</groupId>
-        <artifactId>digitalcoinj-parent</artifactId>
+        <artifactId>infinitecoinj-parent</artifactId>
         <version>0.11</version>
     </parent>
 
-    <artifactId>digitalcoinj</artifactId>
+    <artifactId>infinitecoinj</artifactId>
 
-    <name>digitalcoinj</name>
-    <description>A Java digitalcoin library</description>
+    <name>infinitecoinj</name>
+    <description>A Java infinitecoin library</description>
 
     <profiles>
         <profile>
@@ -176,7 +176,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-        <!-- digitalcoinj consumers are expected to provide their own SLF4J adapters
+        <!-- infinitecoinj consumers are expected to provide their own SLF4J adapters
              such as logback, slf4j-log4j12, slf4j-jcl and so on
              see http://www.slf4j.org/faq.html -->
         <dependency>

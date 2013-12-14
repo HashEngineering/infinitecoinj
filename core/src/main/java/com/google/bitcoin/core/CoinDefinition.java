@@ -8,24 +8,24 @@ import java.util.Vector;
 /**
  * Created with IntelliJ IDEA.
  * User: HashEngineering
- * Date: 8/13/13
+ * Date: 12/13/13
  * Time: 7:23 PM
  * To change this template use File | Settings | File Templates.
  */
 public class CoinDefinition {
 
 
-    public static final String coinName = "digitalcoin";
+    public static final String coinName = "Infinitecoin";
     public static final String coinTicker = "DGC";
-    public static final String coinURIScheme = "digitalcoin";
-    public static final String cryptsyMarketId = "26";
-    public static final String cryptsyMarketCurrency = "BTC";
+    public static final String coinURIScheme = "infinitecoin";
+    public static final String cryptsyMarketId = "60";
+    public static final String cryptsyMarketCurrency = "LTC";
 
 
     public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://dgc.cryptocoinexplorer.com/";
     public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://dgc.cryptocoinexplorer.com/";
 
-    public static final String DONATION_ADDRESS = "DPdbL3n3Y3ypwVEvY3wABmpbjsd3AVqm5M";  //HashEngineering donation DGC address
+    public static final String DONATION_ADDRESS = "i3p7EagqTjB8F3w9N3D28KiHi2BtpFqMdR";  //HashEngineering donation IFC address
 
     enum CoinHash {
         SHA256,
@@ -54,25 +54,25 @@ public class CoinDefinition {
         else
             return TARGET_TIMESPAN;
     }
-    public static int spendableCoinbaseDepth = 5; //main.h: static const int COINBASE_MATURITY
-    public static final int MAX_MONEY = 200000000;                 //main.h:  MAX_MONEY
-    public static final String MAX_MONEY_STRING = "200000000";     //main.h:  MAX_MONEY
+    public static int spendableCoinbaseDepth = 60; //main.h: static const int COINBASE_MATURITY
+    public static final int MAX_MONEY = 90600000000;                 //main.h:  MAX_MONEY
+    public static final String MAX_MONEY_STRING = "90600000000";     //main.h:  MAX_MONEY
 
     public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(10000000);   // MIN_TX_FEE
     public static final BigInteger DUST_LIMIT = Utils.CENT; //main.h CTransaction::GetMinFee        0.01 coins
 
-    public static final int PROTOCOL_VERSION = 60001;          //version.h PROTOCOL_VERSION
-    public static final int MIN_PROTOCOL_VERSION = 209;        //version.h MIN_PROTO_VERSION
+    public static final int PROTOCOL_VERSION = 69001;          //version.h PROTOCOL_VERSION
+    public static final int MIN_PROTOCOL_VERSION = 60001;        //version.h MIN_PROTO_VERSION
 
     public static final boolean supportsBloomFiltering = false; //Requires PROTOCOL_VERSION 70000 in the client
 
-    public static final int Port    = 7999;       //protocol.h GetDefaultPort(testnet=false)
-    public static final int TestPort = 17999;     //protocol.h GetDefaultPort(testnet=true)
+    public static final int Port    = 9321;       //protocol.h GetDefaultPort(testnet=false)
+    public static final int TestPort = 19321;     //protocol.h GetDefaultPort(testnet=true)
 
     //
     //  Production
     //
-    public static final int AddressHeader = 30;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS
+    public static final int AddressHeader = 102;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS
     public static final int dumpedPrivateKeyHeader = 128;   //common to all coins
     public static final long PacketMagic = 0xfbc0b6db;      //0xfb, 0xc0, 0xb6, 0xdb
 
