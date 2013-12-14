@@ -33,14 +33,11 @@ public class CoinDefinition {
     };
     public static final CoinHash coinHash = CoinHash.scrypt;
     //Original Values
-    public static final int TARGET_TIMESPAN_0 = (int)(6 * 60 * 3 * 20);  // 3.5 days per difficulty cycle, on average.
-    public static final int TARGET_SPACING_0 = (int)(1 * 20);  // 2.5 minutes per block.
-    public static final int INTERVAL_0 = TARGET_TIMESPAN_0 / TARGET_SPACING_0;
-
-    public static final int TARGET_TIMESPAN = (int)(108 * 40);  // 72 minutes per difficulty cycle, on average.
-    public static final int TARGET_SPACING = (int)(1 * 40);  // 40 seconds per block.
+    public static final int TARGET_TIMESPAN = (int)(60 * 60);  // 60 minutes per difficulty cycle, on average.
+    public static final int TARGET_SPACING = (int)(1 * 30);  // 30 seconds per block.
 
     public static final int INTERVAL = TARGET_TIMESPAN / TARGET_SPACING;
+	public static final int INTERVAL_PPC = 30;
 
     public static final int getInterval(int height, boolean testNet) {
         if(height < nDifficultySwitchHeight)
@@ -72,144 +69,98 @@ public class CoinDefinition {
     //
     //  Production
     //
+
     public static final int AddressHeader = 102;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS
+    public static final int p2shHeader = 5;             //base58.h CBitcoinAddress::SCRIPT_ADDRESS
+
     public static final int dumpedPrivateKeyHeader = 128;   //common to all coins
     public static final long PacketMagic = 0xfbc0b6db;      //0xfb, 0xc0, 0xb6, 0xdb
 
     //Genesis Block Information from main.cpp: LoadBlockIndex
     static public long genesisBlockDifficultyTarget = (0x1e0ffff0L);         //main.cpp: LoadBlockIndex
-    static public long genesisBlockTime = 1367867384L;                       //main.cpp: LoadBlockIndex
-    static public long genesisBlockNonce = (672176);                         //main.cpp: LoadBlockIndex
-    static public String genesisHash = "5e039e1ca1dbf128973bf6cff98169e40a1b194c3b91463ab74956f413b2f9c8"; //main.cpp: hashGenesisBlock
+    static public long genesisBlockTime = 1370324666L;                       //main.cpp: LoadBlockIndex
+    static public long genesisBlockNonce = (113458625);                         //main.cpp: LoadBlockIndex
+    static public String genesisHash = "b10d5e83a5b2e62d9d872096bc20cae1a276ae6aacc02a71a5832b1fc9aeff85"; //main.cpp: hashGenesisBlock
     static public int genesisBlockValue = 50;                                                              //main.cpp: LoadBlockIndex
     //taken from the raw data of the block explorer
-    static public String genesisXInBytes = "04ffff001d0104294469676974616c636f696e2c20412043757272656e637920666f722061204469676974616c20416765";   //"Digitalcoin, A Currency for a Digital Age"
-    static public String genessiXOutBytes = "04a5814813115273a109cff99907ba4a05d951873dae7acb6c973d0c9e7c88911a3dbc9aa600deac241b91707e7b4ffb30ad91c8e56e695a1ddf318592988afe0a";
+    static public String genesisXInBytes = "04ffff001d01044b4d69616d69204865617420726f757420496e6469616e61205061636572732039392d37362c20616476616e636520746f204e42412046696e616c73206f6e204a756e6520332c2032303133";   //"Digitalcoin, A Currency for a Digital Age"
+    static public String genessiXOutBytes = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-            "direct.crypto-expert.com",
-            "207.12.89.119",
-            "198.50.30.145",
-            "178.237.35.34",
-            "dgc.kadaplace.com",
 
-            "50.116.22.43",                           //dgc.cryptocoinexplorer.com
-            //"dnsseed.bitcoin.co",
-            //"dnsseed.rc.altcointech.net"
-            //"88.161.131.83",
-            //"98.253.19.158" ,
-    //"198.50.233.6"           ,
-    "82.161.111.51"          ,
-    //"93.96.179.57"           ,
-    "37.187.9.53"            ,
-    //"68.63.214.65"           ,
-    //"54.215.9.205"           ,
-
-    //"97.114.111.53"  ,
-
-    //"93.96.179.57" ,
-    //"173.228.105.207"
     };
 
     //
-    // TestNet - digitalcoin - not tested
+    // TestNet - infinite - not tested
     //
     public static final boolean supportsTestNet = false;
     public static final int testnetAddressHeader = 111;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS_TEST
+    public static final int testnetp2shHeader = 196;             //base58.h CBitcoinAddress::SCRIPT_ADDRESS_TEST
     public static final long testnetPacketMagic = 0xfcc1b7dc;      //0xfc, 0xc1, 0xb7, 0xdc
-    public static final String testnetGenesisHash = "5e039e1ca1dbf128973bf6cff98169e40a1b194c3b91463ab74956f413b2f9c8";
+    public static final String testnetGenesisHash = "47cfc1ea5d27a873dcc90fa8befc9378dbc793ca68dd608d4f6aa123437701ba";
     static public long testnetGenesisBlockDifficultyTarget = (0x1e0ffff0L);         //main.cpp: LoadBlockIndex
-    static public long testnetGenesisBlockTime = 999999L;                       //main.cpp: LoadBlockIndex
-    static public long testnetGenesisBlockNonce = (99999);                         //main.cpp: LoadBlockIndex
+    static public long testnetGenesisBlockTime = 1367711671;                       //main.cpp: LoadBlockIndex
+    static public long testnetGenesisBlockNonce = (111787711);                         //main.cpp: LoadBlockIndex
 
 
 
-    public static int nDifficultySwitchHeight = 476280;
-    public static int nInflationFixHeight = 523800;
 
-    public static final boolean usingNewDifficultyProtocol(int height)
-    { return height >= nDifficultySwitchHeight;}
+    public static int IFC_SWITCH_TIME = 1377993600;		// Sept 1, 2013 00:00:00 GMT
+	public static int IFC_FEE_MULTIPLICATOR = 100;		// Transaction Fee Multiplicator
 
-    public static final boolean usingInflationFixProtocol(int height)
-    { return height >= nInflationFixHeight;}
+	public static int IFC_RETARGET_SWITCH_BLOCK		= 245000;		
+	public static int IFC_RETARGET_SWITCH_BLOCK2	= 248000;		
+	public static int IFC_RETARGET_SWITCH_BLOCK3	= 272000;	
+
 
     //main.cpp GetBlockValue(height, fee)
     public static final BigInteger GetBlockReward(int height)
     {
-        int COIN = 1;
-        BigInteger nSubsidy = Utils.toNanoCoins(15, 0);
+        BigInteger nSubsidy = Utils.toNanoCoins(524288, 0);
 
-        if(height < 1080)
-        {
-            nSubsidy = Utils.toNanoCoins(2, 0); //2
-        }
-        else if(height < 2160)
-        {
-            nSubsidy   = Utils.toNanoCoins(1, 0); //2
-        }
-        else if(height < 3240)
-        {
-            nSubsidy   = Utils.toNanoCoins(2, 0); //2
-        }
-        else if(height < 4320)
-        {
-            nSubsidy  = Utils.toNanoCoins(5, 0); //5
-        }
-        else if(height < 5400)
-        {
-            nSubsidy  = Utils.toNanoCoins(8, 0); //8
-        }
-        else if(height < 6480)
-        {
-            nSubsidy = Utils.toNanoCoins(11, 0); //11
-        }
-        else if(height < 7560)
-        {
-            nSubsidy  = Utils.toNanoCoins(14, 0); //14
-        }
-        else if(height < 8640)
-        {
-            nSubsidy = Utils.toNanoCoins(17, 0); //17
-        }
-        else if(height < 523800)
-        {
-            nSubsidy = Utils.toNanoCoins(20, 0); //2
-        }
-        else
-        {
-            return nSubsidy.shiftRight(height / subsidyDecreaseBlockCount);
-        }
-        return nSubsidy;
+        return nSubsidy.shiftRight(height / subsidyDecreaseBlockCount);
+
     }
 
-    public static int subsidyDecreaseBlockCount = 4730400;     //main.cpp GetBlockValue(height, fee)
+    public static int subsidyDecreaseBlockCount = 86400;     //main.cpp GetBlockValue(height, fee)
 
-    public static BigInteger proofOfWorkLimit = Utils.decodeCompactBits(0x1e0fffffL);  //main.cpp bnProofOfWorkLimit (~uint256(0) >> 20); // digitalcoin: starting difficulty is 1 / 2^12
+    public static BigInteger proofOfWorkLimit = Utils.decodeCompactBits(0x1e0fffffL);  //main.cpp bnProofOfWorkLimit (~Sha256Hash(0) >> 20); // digitalcoin: starting difficulty is 1 / 2^12
 
     static public String[] testnetDnsSeeds = new String[] {
           "not supported"
     };
     //from main.h: CAlert::CheckSignature
-    public static final String SATOSHI_KEY = "04A9CFD81AF5D53310BE45E6326E706A542B1028DF85D2819D5DE496D8816C83129CE874FE5E3A23B03544BFF35458833779DAB7A6FF687525A4E23CA59F1E2B94";
-    public static final String TESTNET_SATOSHI_KEY = "";
+    public static final String SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
+    public static final String TESTNET_SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
 
     /** The string returned by getId() for the main, production network where people trade things. */
-    public static final String ID_MAINNET = "org.bitcoin.production";
+    public static final String ID_MAINNET = "org.infinitcoin.production";
     /** The string returned by getId() for the testnet. */
-    public static final String ID_TESTNET = "org.bitcoin.test";
+    public static final String ID_TESTNET = "org.infinitcoin.test";
     /** Unit test network. */
-    public static final String ID_UNITTESTNET = "com.google.bitcoin.unittest";
+    public static final String ID_UNITTESTNET = "com.google.infinitcoin.unittest";
 
     //checkpoints.cpp Checkpoints::mapCheckpoints
     public static void initCheckpoints(Map<Integer, Sha256Hash> checkpoints)
     {
-        checkpoints.put( 0, new Sha256Hash("5e039e1ca1dbf128973bf6cff98169e40a1b194c3b91463ab74956f413b2f9c8"));
-        checkpoints.put( 1, new Sha256Hash("45b2559dbe5e5772498e4170f3f1561448179fa90dd349e60e891766878dea2e"));
-        checkpoints.put( 20, new Sha256Hash("59436aad777d285d52a3fb61b4176c7ca30a1254b7fc1480b2c7320913953fe3"));
-        checkpoints.put( 3500, new Sha256Hash("6e92c6cf634c39149d07f022cf13e87b91713d1e7a5d9abc2b5f3646a4027838"));
-        checkpoints.put( 22222, new Sha256Hash("7a58919a24c189f8c286413381e6ed7224c90a4181a7f7cd098825cc75ddec27"));
-        checkpoints.put( 480000, new Sha256Hash("a11759fa9ed9c11769dc7ec3c279f523c886ea0ca0b9e1d1a49441c32b701f0d"));
+        checkpoints.put    (    99, new Sha256Hash("5d39f8648c612d6e01b953fcfc6e7c31a58f086ae4715ae3e5e828cd148052a9"))
+        checkpoints.put    (   999, new Sha256Hash("18045133dedbed71aa49aaf1696b65818ca21b20263cd53cc9bd935c1c8be6ee"))
+        checkpoints.put    (  9999, new Sha256Hash("d2f1a2f1b8862af96c5a750f3d99680ee96e7a4aac4e27f0587b1dbaa9b9207f"))
+        checkpoints.put    ( 49999, new Sha256Hash("ef2a0653071708d6a41dff2bb671bb459879f2c361a06024fca17a2566b41225"))
+        checkpoints.put    ( 99979, new Sha256Hash("f376177d849c75c6344fc93c9429f59df7d5b25b067447e694e087bb765128e0"))
+        checkpoints.put    (139999, new Sha256Hash("ff9d5edf1661d8cd6fc53ffb9f583b16981874522044a760d8c8c004c312a41e"))
+        checkpoints.put    (199999, new Sha256Hash("ec62c7700fd83c56f2013b1b97a7dbcc2aad1f065176ea18d9c47701ced164d5"))
+        checkpoints.put    (228800, new Sha256Hash("6a2a329c5d21d6433cf9bda5ba43d66a732898bcd0c81150f1584d095edd5cd5"))
+        checkpoints.put    (242388, new Sha256Hash("4c2dfd22435525519e89041420f6692e709da34f48243cebe1be14d43adb1c5c"))
+        checkpoints.put    (265420, new Sha256Hash("9ef4ce8e7dab5c2f2b9142ceb285419ef0ea62021e5f613d4a81a3fc9d53453e"))
+		checkpoints.put	(265497, new Sha256Hash("206aed8fb5b1ed94cf696bc5b964445380dd4c30c186e45ba5ed545866a242c7")) // keep
+        checkpoints.put    (268559, new Sha256Hash("fd0ff0e0020f0ade68122c0fd82f648c7e6913e32cd6a3d8abc81694055daecc")) // keep
+		checkpoints.put	(268560, new Sha256Hash("08c5337322ea40d3602b98ab9d9b1d43abd87dda19a4f8e282414a838ae3dbb8"))
+        checkpoints.put   (282045, new Sha256Hash("271abe1c26daf5a684034529befb217e16f87e1af779c0e63bdd971def3d8ba5"))
+		checkpoints.put	(380962, new Sha256Hash("a032a87b430091fbb4faa20f16c8247f93cfcc1854bd49a19c3c9fc3a0c43634"))
+		checkpoints.put	(453211, new Sha256Hash("ea08eace1b78c5513d74750c7cfc01d0c1f3789fc650ccce197b85497405ce56"))
+
     }
 
 
