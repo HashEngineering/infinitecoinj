@@ -780,17 +780,17 @@ public abstract class AbstractBlockChain {
         checkState(lock.isLocked());
         Block prev = storedPrev.getHeader();
 
-        int nDifficultySwitchHeight = 476280;
-        int nInflationFixHeight = 523800;
-        boolean fNewDifficultyProtocol = ((storedPrev.getHeight() + 1) >= CoinDefinition.nDifficultySwitchHeight);
-        boolean fInflationFixProtocol = ((storedPrev.getHeight() + 1) >= CoinDefinition.nInflationFixHeight);
+        //int nDifficultySwitchHeight = 476280;
+        //int nInflationFixHeight = 523800;
+        //boolean fNewDifficultyProtocol = ((storedPrev.getHeight() + 1) >= CoinDefinition.nDifficultySwitchHeight);
+        //boolean fInflationFixProtocol = ((storedPrev.getHeight() + 1) >= CoinDefinition.nInflationFixHeight);
 
-        int nTargetTimespanCurrent = fInflationFixProtocol? params.targetTimespan : (params.targetTimespan*5);
-        int interval = fInflationFixProtocol? (nTargetTimespanCurrent / params.TARGET_SPACING) : (nTargetTimespanCurrent / (params.TARGET_SPACING / 2));
+        int nTargetTimespanCurrent = CoinDefinition.TARGET_TIMESPAN;
+        int interval = CoinDefinition.INTERVAL;
 
         // Is this supposed to be a difficulty transition point?
-        if ((storedPrev.getHeight() + 1) % interval != 0 &&
-                (storedPrev.getHeight() + 1) != nDifficultySwitchHeight)
+        if ((storedPrev.getHeight() + 1) < CoinDefinition.IFC_RETARGET_SWITCH_BLOCK &&
+                (storedPrev.getHeight() + 1) % interval != 0)
         {
 
             // TODO: Refactor this hack after 0.5 is released and we stop supporting deserialization compatibility.
@@ -810,50 +810,77 @@ public abstract class AbstractBlockChain {
         }
 
         // We need to find a block far back in the chain. It's OK that this is expensive because it only occurs every
-        // two weeks after the initial block chain download.
-        long now = System.currentTimeMillis();
-        StoredBlock cursor = blockStore.get(prev.getHash());
+        // two hours after the initial block chain download.
+        long timespan = 0;
 
-        int goBack = interval - 1;
-        if (cursor.getHeight()+1 != interval)
-            goBack = interval;
+        if(storedPrev.getHeight()+1 < CoinDefinition.IFC_RETARGET_SWITCH_BLOCK3)
+        {
+            long now = System.currentTimeMillis();
 
-        for (int i = 0; i < goBack; i++) {
-            if (cursor == null) {
-                // This should never happen. If it does, it means we are following an incorrect or busted chain.
-                throw new VerificationException(
-                        "Difficulty transition point but we did not find a way back to the genesis block.");
+            StoredBlock cursor = blockStore.get(prev.getHash());
+
+            int goBack = interval - 1;
+            if (cursor.getHeight()+1 != interval)
+                goBack = interval;
+
+            for (int i = 0; i < goBack; i++) {
+                if (cursor == null) {
+                    // This should never happen. If it does, it means we are following an incorrect or busted chain.
+                    throw new VerificationException(
+                            "Difficulty transition point but we did not find a way back to the genesis block.");
+                }
+                cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
             }
-            cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
+            long elapsed = System.currentTimeMillis() - now;
+            if (elapsed > 50)
+                log.info("Difficulty transition traversal took {}msec", elapsed);
+
+            // Check if our cursor is null.  If it is, we've used checkpoints to restore.
+            if(cursor == null) return;
+
+            Block blockIntervalAgo = cursor.getHeader();
+            timespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
+            // Limit the adjustment step.
+
+            if((storedPrev.getHeight()+1) < 1500)
+            {
+                if (timespan < CoinDefinition.TARGET_TIMESPAN/16)
+                    timespan = CoinDefinition.TARGET_TIMESPAN/16;
+            }
+            else
+            {
+                if (timespan < CoinDefinition.TARGET_TIMESPAN/4)
+                    timespan = CoinDefinition.TARGET_TIMESPAN/4;
+            }
+
+            if (timespan > CoinDefinition.TARGET_TIMESPAN*4)
+                timespan = CoinDefinition.TARGET_TIMESPAN*4;
+
         }
-        long elapsed = System.currentTimeMillis() - now;
-        if (elapsed > 50)
-            log.info("Difficulty transition traversal took {}msec", elapsed);
+        else
+        {
+            StoredBlock first = blockStore.get(prev.getPrevBlockHash());
+            timespan = (prev.getTimeSeconds() - first.getHeader().getTimeSeconds()) * interval;
 
-        // Check if our cursor is null.  If it is, we've used checkpoints to restore.
-        if(cursor == null) return;
-
-        Block blockIntervalAgo = cursor.getHeader();
-        int timespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
-        // Limit the adjustment step.
-
-        int nActualTimespanMax = fNewDifficultyProtocol? (nTargetTimespanCurrent*2) : (nTargetTimespanCurrent*4);
-        int nActualTimespanMin = fNewDifficultyProtocol? (nTargetTimespanCurrent/2) : (nTargetTimespanCurrent/4);
-
-        //new for v1.0 - POSSIBLE BUG in digitalcoin client   - this is not used
-        //if (fInflationFixProtocol){
-        //   nActualTimespanMax = ((nTargetTimespanCurrent*75)/55);
-        //    nActualTimespanMin = ((nTargetTimespanCurrent*55)/75);
-        //}
-
-        if (timespan < nActualTimespanMin)
-            timespan = nActualTimespanMin;
-        if (timespan > nActualTimespanMax)
-            timespan = nActualTimespanMax;
+            // limit the adjustment
+            if (timespan < CoinDefinition.TARGET_TIMESPAN/16)
+                timespan = CoinDefinition.TARGET_TIMESPAN/16;
+            if (timespan > CoinDefinition.TARGET_TIMESPAN*16)
+                timespan = CoinDefinition.TARGET_TIMESPAN*16;
+        }
 
         BigInteger newDifficulty = Utils.decodeCompactBits(prev.getDifficultyTarget());
-        newDifficulty = newDifficulty.multiply(BigInteger.valueOf(timespan));
-        newDifficulty = newDifficulty.divide(BigInteger.valueOf(nTargetTimespanCurrent));
+
+        if((storedPrev.getHeight() + 1) < CoinDefinition.IFC_RETARGET_SWITCH_BLOCK2)
+        {
+            newDifficulty = newDifficulty.multiply(BigInteger.valueOf(timespan));
+            newDifficulty = newDifficulty.divide(BigInteger.valueOf(nTargetTimespanCurrent));
+        }
+        else
+        {
+            newDifficulty = newDifficulty.multiply(BigInteger.valueOf((CoinDefinition.INTERVAL_PPC - 1) * nTargetTimespanCurrent + timespan + timespan));
+            newDifficulty = newDifficulty.divide(BigInteger.valueOf((CoinDefinition.INTERVAL_PPC + 1) *nTargetTimespanCurrent));
+        }
 
         if (newDifficulty.compareTo(params.proofOfWorkLimit) > 0) {
             log.info("Difficulty hit proof of work limit: {}", newDifficulty.toString(16));
