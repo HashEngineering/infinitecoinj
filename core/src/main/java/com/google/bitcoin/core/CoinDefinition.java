@@ -83,14 +83,13 @@ public class CoinDefinition {
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-            //"88.164.227.110",
-            //"75.81.61.56",
-            "5.249.152.159",
-            "infinitecoin.com",
-            "ifc.scryptmining.com",
-            "111.161.77.213",
-            "67.193.198.104",
-            "85.217.147.117"
+            "173.32.136.230",
+            "88.185.240.118",
+            "70.171.229.160",
+            "88.106.75.103",
+            "72.28.184.25"
+
+
     };
 
     //
