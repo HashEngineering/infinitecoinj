@@ -83,6 +83,8 @@ public class CoinDefinition {
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
+            "treasurequarry.com",
+            "exploretheblocks.com",
             "173.32.136.230",
             "88.185.240.118",
             "70.171.229.160",
