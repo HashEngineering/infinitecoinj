@@ -32,7 +32,10 @@ public class CoinDefinition {
         scrypt
     };
     public static final CoinHash coinHash = CoinHash.scrypt;
+
+    public static boolean checkpointFileSupport = false;
     //Original Values
+
     public static final int TARGET_TIMESPAN = (int)(60 * 60);  // 60 minutes per difficulty cycle, on average.
     public static final int TARGET_SPACING = (int)(1 * 30);  // 30 seconds per block.
 
@@ -61,6 +64,11 @@ public class CoinDefinition {
 
     public static final int PROTOCOL_VERSION = 69001;          //version.h PROTOCOL_VERSION
     public static final int MIN_PROTOCOL_VERSION = 60001;        //version.h MIN_PROTO_VERSION
+
+
+    public static final int BLOCK_CURRENTVERSION = 1;   //CBlock::CURRENT_VERSION
+    public static final int MAX_BLOCK_SIZE = 1 * 1000 * 1000;
+
 
     public static final boolean supportsBloomFiltering = false; //Requires PROTOCOL_VERSION 70000 in the client
 
@@ -97,7 +105,6 @@ public class CoinDefinition {
             "88.106.75.103",
             "72.28.184.25"
 
-
     };
 
     //
@@ -113,10 +120,9 @@ public class CoinDefinition {
     static public long testnetGenesisBlockNonce = (111787711);                         //main.cpp: LoadBlockIndex
 
 
-
-
     public static int IFC_SWITCH_TIME = 1377993600;		// Sept 1, 2013 00:00:00 GMT
 	public static int IFC_FEE_MULTIPLICATOR = 100;		// Transaction Fee Multiplicator
+
 
 	public static int IFC_RETARGET_SWITCH_BLOCK		= 245000;		
 	public static int IFC_RETARGET_SWITCH_BLOCK2	= 248000;		
@@ -153,6 +159,7 @@ public class CoinDefinition {
     //checkpoints.cpp Checkpoints::mapCheckpoints
     public static void initCheckpoints(Map<Integer, Sha256Hash> checkpoints)
     {
+
         checkpoints.put    (    99, new Sha256Hash("5d39f8648c612d6e01b953fcfc6e7c31a58f086ae4715ae3e5e828cd148052a9"));
         checkpoints.put    (   999, new Sha256Hash("18045133dedbed71aa49aaf1696b65818ca21b20263cd53cc9bd935c1c8be6ee"));
         checkpoints.put    (  9999, new Sha256Hash("d2f1a2f1b8862af96c5a750f3d99680ee96e7a4aac4e27f0587b1dbaa9b9207f"));
