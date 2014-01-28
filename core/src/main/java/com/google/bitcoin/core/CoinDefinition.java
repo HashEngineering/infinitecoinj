@@ -40,7 +40,13 @@ public class CoinDefinition {
 	public static final int INTERVAL_PPC = 30;
 
     public static final int getInterval(int height, boolean testNet) {
+        if(height < IFC_RETARGET_SWITCH_BLOCK)
             return INTERVAL;
+        else if(height < IFC_RETARGET_SWITCH_BLOCK2)
+            return INTERVAL;
+        else if(height < IFC_RETARGET_SWITCH_BLOCK3)
+            return INTERVAL;
+        else return INTERVAL_PPC;
     }
     public static final int getTargetTimespan(int height, boolean testNet) {
 

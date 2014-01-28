@@ -131,6 +131,8 @@ public class CheckpointManager {
         }
     }
 
+
+
     /** Returns the number of checkpoints that were loaded. */
     public int numCheckpoints() {
         return checkpoints.size();
@@ -148,6 +150,11 @@ public class CheckpointManager {
      *
      * <p>Note that time is adjusted backwards by a week to account for possible clock drift in the block headers.</p>
      */
+    //for testing of the forks
+    long timeBegin = 0;
+    long timeFork1 = 0;
+    long timeFork2 = 0;
+    long timeFork3 = 0;
     public static void checkpoint(NetworkParameters params, InputStream checkpoints, BlockStore store, long time)
             throws IOException, BlockStoreException {
         checkNotNull(params);
@@ -159,6 +166,7 @@ public class CheckpointManager {
         BufferedInputStream stream = new BufferedInputStream(checkpoints);
         CheckpointManager manager = new CheckpointManager(params, stream);
         StoredBlock checkpoint = manager.getCheckpointBefore(time);
+
         store.put(checkpoint);
         store.setChainHead(checkpoint);
     }
