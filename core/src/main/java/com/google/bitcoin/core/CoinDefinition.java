@@ -33,7 +33,7 @@ public class CoinDefinition {
     };
     public static final CoinHash coinHash = CoinHash.scrypt;
 
-    public static boolean checkpointFileSupport = false;
+    public static boolean checkpointFileSupport = true;
     //Original Values
 
     public static final int TARGET_TIMESPAN = (int)(60 * 60);  // 60 minutes per difficulty cycle, on average.
@@ -99,11 +99,8 @@ public class CoinDefinition {
     static public String[] dnsSeeds = new String[] {
             "treasurequarry.com",
             "exploretheblocks.com",
-            "173.32.136.230",
-            "88.185.240.118",
-            "70.171.229.160",
-            "88.106.75.103",
-            "72.28.184.25"
+            "94.23.16.150",
+
 
     };
 

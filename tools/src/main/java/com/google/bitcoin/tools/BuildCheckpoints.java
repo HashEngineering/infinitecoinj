@@ -36,7 +36,10 @@ public class BuildCheckpoints {
         final BlockStore store = new MemoryBlockStore(params);
         final BlockChain chain = new BlockChain(params, store);
         final PeerGroup peerGroup = new PeerGroup(params, chain);
-        peerGroup.addAddress(InetAddress.getLocalHost());
+        //peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("94.23.16.150"));
+        //peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("treasurequarry.com"));
+        peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("exploretheblocks.com"));
+
         long now = new Date().getTime() / 1000;
         peerGroup.setFastCatchupTimeSecs(now);
 
@@ -46,7 +49,19 @@ public class BuildCheckpoints {
             @Override
             public void notifyNewBestBlock(StoredBlock block) throws VerificationException {
                 int height = block.getHeight();
-                if (height % /*params.getInterval()*/CoinDefinition.getInterval(height, false) == 0 && block.getHeader().getTimeSeconds() <= oneMonthAgo) {
+
+                boolean addCheckpoint = false;
+                //For the first set of blocks, the difficulty retarget is every 120 blocks.
+                //Seems like we could increase the interval by 10 fold to reduce the size of the checkpoint file.
+                if(height < (CoinDefinition.IFC_RETARGET_SWITCH_BLOCK - 120) && height % CoinDefinition.getInterval(height, false) == 0)
+                    addCheckpoint = true;
+                //  There is no need to checkpoint any blocks that came between the 2nd and 4th fork.
+                //
+                //This is after the diff fork which only requires the previous block to calc the adjustment
+                //We can choose any interval we want.  Let us choose 1 day.
+                //if(height >= CoinDefinition.IFC_RETARGET_SWITCH_BLOCK3 && height % 2880 == 0)
+                //    addCheckpoint = true;
+                if (addCheckpoint && block.getHeader().getTimeSeconds() <= oneMonthAgo) {
                     System.out.println(String.format("Checkpointing block %s at height %d",
                             block.getHeader().getHash(), block.getHeight()));
                     checkpoints.put(height, block);
@@ -87,8 +102,8 @@ public class BuildCheckpoints {
         // Sanity check the created file.
         CheckpointManager manager = new CheckpointManager(params, new FileInputStream("checkpoints"));
         checkState(manager.numCheckpoints() == checkpoints.size());
-        StoredBlock test = manager.getCheckpointBefore(1348310800);  // Just after block 200,000
-        checkState(test.getHeight() == 199584);
-        checkState(test.getHeader().getHashAsString().equals("000000000000002e00a243fe9aa49c78f573091d17372c2ae0ae5e0f24f55b52"));
+        //StoredBlock test = manager.getCheckpointBefore(1348310800);  // Just after block 200,000
+        //checkState(test.getHeight() == 199584);
+        //checkState(test.getHeader().getHashAsString().equals("000000000000002e00a243fe9aa49c78f573091d17372c2ae0ae5e0f24f55b52"));
     }
 }
