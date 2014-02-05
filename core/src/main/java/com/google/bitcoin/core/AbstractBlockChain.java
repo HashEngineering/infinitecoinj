@@ -881,6 +881,12 @@ public abstract class AbstractBlockChain {
         else
         {
             StoredBlock first = blockStore.get(prev.getPrevBlockHash());
+            if(first == null)
+            {
+                //This is activated based on the checkpointing system
+                //We can return and accept this block.  The difficulty validation can begin with the next block.
+                return;
+            }
             timespan = (prev.getTimeSeconds() - first.getHeader().getTimeSeconds()) * interval;
 
             // limit the adjustment

@@ -39,7 +39,7 @@ public class BuildCheckpoints {
         //peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("94.23.16.150"));
         //peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("treasurequarry.com"));
         peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("exploretheblocks.com"));
-
+        //peerGroup.addAddress(InetAddress.getLocalHost());
         long now = new Date().getTime() / 1000;
         peerGroup.setFastCatchupTimeSecs(now);
 
@@ -53,14 +53,14 @@ public class BuildCheckpoints {
                 boolean addCheckpoint = false;
                 //For the first set of blocks, the difficulty retarget is every 120 blocks.
                 //Seems like we could increase the interval by 10 fold to reduce the size of the checkpoint file.
-                if(height < (CoinDefinition.IFC_RETARGET_SWITCH_BLOCK - 120) && height % CoinDefinition.getInterval(height, false) == 0)
+                if(height < (CoinDefinition.IFC_RETARGET_SWITCH_BLOCK - 120) && height % (CoinDefinition.getInterval(height, false)*10) == 0)
                     addCheckpoint = true;
                 //  There is no need to checkpoint any blocks that came between the 2nd and 4th fork.
                 //
                 //This is after the diff fork which only requires the previous block to calc the adjustment
                 //We can choose any interval we want.  Let us choose 1 day.
-                //if(height >= CoinDefinition.IFC_RETARGET_SWITCH_BLOCK3 && height % 2880 == 0)
-                //    addCheckpoint = true;
+                if(height >= CoinDefinition.IFC_RETARGET_SWITCH_BLOCK3 && height % 2880 == 0)
+                    addCheckpoint = true;
                 if (addCheckpoint && block.getHeader().getTimeSeconds() <= oneMonthAgo) {
                     System.out.println(String.format("Checkpointing block %s at height %d",
                             block.getHeader().getHash(), block.getHeight()));
