@@ -17,7 +17,7 @@ public class CoinDefinition {
 
     public static final String coinName = "Infinitecoin";
     public static final String coinTicker = "IFC";
-    public static final String coinURIScheme = "infinitecoin";
+    public static final String coinURIScheme = "ifc";
     public static final String cryptsyMarketId = "60";
     public static final String cryptsyMarketCurrency = "LTC";
 
@@ -59,8 +59,8 @@ public class CoinDefinition {
     //public static final long MAX_MONEY = 90600000000;                 //main.h:  MAX_MONEY
     public static final String MAX_MONEY_STRING = "90600000000";     //main.h:  MAX_MONEY
 
-    public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(100 * 100000000);   // MIN_TX_FEE
-    public static final BigInteger DUST_LIMIT = BigInteger.valueOf(1000 * 100000000);      //   0.01 coins
+    public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(10000000000L);   // MIN_TX_FEE 100 coins
+    public static final BigInteger DUST_LIMIT = BigInteger.valueOf(100000000000L);      //   1000 coins
 
     public static final int PROTOCOL_VERSION = 69002;          //version.h PROTOCOL_VERSION
     public static final int MIN_PROTOCOL_VERSION = 69001;        //version.h MIN_PROTO_VERSION
