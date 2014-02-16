@@ -21,6 +21,12 @@ public class CoinDefinition {
     public static final String cryptsyMarketId = "60";
     public static final String cryptsyMarketCurrency = "LTC";
 
+    public enum CoinPrecision {
+        Coins,
+        Millicoins,
+    }
+    public static final CoinPrecision coinPrecision = CoinPrecision.Coins;
+
 
     public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://exploretheblocks.com:2750/";
     public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://exploretheblocks.com:2750/";
@@ -39,8 +45,10 @@ public class CoinDefinition {
     public static final int TARGET_TIMESPAN = (int)(60 * 60);  // 60 minutes per difficulty cycle, on average.
     public static final int TARGET_SPACING = (int)(1 * 30);  // 30 seconds per block.
 
+
     public static final int INTERVAL = TARGET_TIMESPAN / TARGET_SPACING;  //120 blocks
 	public static final int INTERVAL_PPC = 30;
+
 
     public static final int getInterval(int height, boolean testNet) {
         if(height < IFC_RETARGET_SWITCH_BLOCK)
