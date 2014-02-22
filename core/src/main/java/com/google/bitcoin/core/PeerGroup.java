@@ -134,7 +134,7 @@ public class PeerGroup extends AbstractExecutionThreadService implements Transac
         }
     };
 
-    private int minBroadcastConnections = 0;
+    private int minBroadcastConnections = CoinDefinition.minBroadcastConnections;
     private Runnable bloomSendIfChanged = new Runnable() {
         @Override public void run() {
             recalculateFastCatchupAndFilter(FilterRecalculateMode.SEND_IF_CHANGED);
@@ -310,6 +310,8 @@ public class PeerGroup extends AbstractExecutionThreadService implements Transac
         peerDiscoverers = new CopyOnWriteArraySet<PeerDiscovery>();
         peerEventListeners = new CopyOnWriteArrayList<ListenerRegistration<PeerEventListener>>();
         runningBroadcasts = Collections.synchronizedSet(new HashSet<TransactionBroadcast>());
+
+
     }
 
     /**
@@ -1260,6 +1262,7 @@ public class PeerGroup extends AbstractExecutionThreadService implements Transac
                     return max;
                 else
                     return (int) Math.round(getMaxConnections() / 2.0);
+                    //return CoinDefinition.minConnectionsForBroadcastTx == 0 ? (int) Math.round(getMaxConnections() / 2.0) : CoinDefinition.minConnectionsForBroadcastTx;
             }
             return minBroadcastConnections;
         } finally {

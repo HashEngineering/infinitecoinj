@@ -97,8 +97,9 @@ public class TransactionBroadcast {
             // our version message, as SPV nodes cannot relay it doesn't give away any additional information
             // to skip the inv here - we wouldn't send invs anyway.
             int numConnected = peers.size();
+            //numToBroadcastTo = CoinDefinition.minConnectionsForBroadcastTx == 0 ? (int) Math.max(1, Math.round(Math.ceil(peers.size() / 2.0))) : CoinDefinition.minConnectionsForBroadcastTx;      //IFC change
             numToBroadcastTo = (int) Math.max(1, Math.round(Math.ceil(peers.size() / 2.0)));
-            numWaitingFor = (int) Math.ceil((peers.size() - numToBroadcastTo) / 2.0);
+            numWaitingFor = (int) Math.ceil((peers.size() - numToBroadcastTo) / 2.0);             //IFC change
             Collections.shuffle(peers, random);
             peers = peers.subList(0, numToBroadcastTo);
             log.info("broadcastTransaction: We have {} peers, adding {} to the memory pool and sending to {} peers, will wait for {}: {}",
