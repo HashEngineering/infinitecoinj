@@ -111,7 +111,7 @@ public class CoinDefinition {
 
 
     };
-    public static int minBroadcastConnections = 1;   //we need moe peers.
+    public static int minBroadcastConnections = 1;   //0 for default; we need more peers.
 
     //
     // TestNet - infinite - not tested
