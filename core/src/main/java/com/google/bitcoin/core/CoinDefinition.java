@@ -28,16 +28,20 @@ public class CoinDefinition {
     public static final CoinPrecision coinPrecision = CoinPrecision.Coins;
 
 
+
     public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://exploretheblocks.com:2750/";
     public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://exploretheblocks.com:2750/";
+    public static final String BLOCKEXPLORER_ADDRESS_PATH = "address/";             //blockr.io path
+    public static final String BLOCKEXPLORER_TRANSACTION_PATH = "tx/";              //blockr.io path
+    public static final String BLOCKEXPLORER_BLOCK_PATH = "block/";                 //blockr.io path
 
     public static final String DONATION_ADDRESS = "i3p7EagqTjB8F3w9N3D28KiHi2BtpFqMdR";  //HashEngineering donation IFC address
 
     enum CoinHash {
         SHA256,
-        scrypt
+        scrypt,
     };
-    public static final CoinHash coinHash = CoinHash.scrypt;
+    public static final CoinHash coinPOWHash = CoinHash.scrypt;
 
     public static boolean checkpointFileSupport = true;
     //Original Values
@@ -59,13 +63,17 @@ public class CoinDefinition {
             return INTERVAL;
         else return INTERVAL_PPC;
     }
+
     public static final int getTargetTimespan(int height, boolean testNet) {
 
             return TARGET_TIMESPAN;
     }
+
     public static int spendableCoinbaseDepth = 60; //main.h: static const int COINBASE_MATURITY
-    //public static final long MAX_MONEY = 90600000000;                 //main.h:  MAX_MONEY
     public static final String MAX_MONEY_STRING = "90600000000";     //main.h:  MAX_MONEY
+    public static final BigInteger MAX_MONEY = BigInteger.valueOf(90600000000L).multiply(Utils.COIN);                 //main.h:  MAX_MONEY
+
+
 
     public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(10000000000L);   // MIN_TX_FEE 100 coins   * 200
     public static final BigInteger DUST_LIMIT =        BigInteger.valueOf(100000000000L);      //   1000 coins
@@ -89,7 +97,7 @@ public class CoinDefinition {
 
     public static final int AddressHeader = 102;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS
     public static final int p2shHeader = 5;             //base58.h CBitcoinAddress::SCRIPT_ADDRESS
-
+    public static final boolean allowBitcoinPrivateKey = true; //for backward compatibility with previous version of digitalcoin
     public static final int dumpedPrivateKeyHeader = 128;   //common to all coins
     public static final long PacketMagic = 0xfbc0b6db;      //0xfb, 0xc0, 0xb6, 0xdb
 
@@ -105,10 +113,10 @@ public class CoinDefinition {
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
+
             //"treasurequarry.com",
             "exploretheblocks.com",
             "94.23.16.150",
-
 
     };
     public static int minBroadcastConnections = 1;   //0 for default; we need more peers.
@@ -156,11 +164,13 @@ public class CoinDefinition {
     public static final String TESTNET_SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
 
     /** The string returned by getId() for the main, production network where people trade things. */
+
     public static final String ID_MAINNET = "org.infinitcoin.production";
     /** The string returned by getId() for the testnet. */
     public static final String ID_TESTNET = "org.infinitcoin.test";
     /** Unit test network. */
     public static final String ID_UNITTESTNET = "com.google.infinitcoin.unittest";
+
 
     //checkpoints.cpp Checkpoints::mapCheckpoints
     public static void initCheckpoints(Map<Integer, Sha256Hash> checkpoints)
@@ -185,5 +195,8 @@ public class CoinDefinition {
 
     }
 
+    //Unit Test Information
+    public static final String UNITTEST_ADDRESS = "iF9mQhwCeqBkoQa5vZ3NAyLNT1vAhoB2fG";
+    public static final String UNITTEST_ADDRESS_PRIVATE_KEY = "b8AF462o5QQZvgVNeU47HBKMZ9SgMBhPXrV52kizJbZJK8ngG4ah";
 
 }

@@ -70,7 +70,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Andreas Schildbach (initial code)
  * @author Jim Burton (enhancements for MultiBit)
  * @author Gary Rowe (BIP21 support)
- * @see <a href="https://en.bitcoin.it/wiki/BIP_0021">BIP 0021</a>
+ * @see <a href="https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki">BIP 0021</a>
  */
 public class BitcoinURI {
     /**
@@ -151,7 +151,7 @@ public class BitcoinURI {
         // Split off the address from the rest of the query parameters.
         String[] addressSplitTokens = schemeSpecificPart.split("\\?");
         if (addressSplitTokens.length == 0)
-            throw new BitcoinURIParseException("No data found after the bitcoin: prefix");
+            throw new BitcoinURIParseException("No data found after the "+CoinDefinition.coinName +": prefix");
         String addressToken = addressSplitTokens[0];  // may be empty!
 
         String[] nameValuePairTokens;
@@ -195,7 +195,7 @@ public class BitcoinURI {
         for (String nameValuePairToken : nameValuePairTokens) {
             String[] tokens = nameValuePairToken.split("=");
             if (tokens.length != 2 || "".equals(tokens[0])) {
-                throw new BitcoinURIParseException("Malformed Bitcoin URI - cannot parse name value pair '" +
+                throw new BitcoinURIParseException("Malformed "+CoinDefinition.coinName +" URI - cannot parse name value pair '" +
                         nameValuePairToken + "'");
             }
 
@@ -327,7 +327,7 @@ public class BitcoinURI {
     public static String convertToBitcoinURI(String address, @Nullable BigInteger amount, @Nullable String label,
                                              @Nullable String message) {
         checkNotNull(address);
-        if (amount != null && amount.compareTo(BigInteger.ZERO) < 0) {
+        if (amount != null && amount.signum() < 0) {
             throw new IllegalArgumentException("Amount must be positive");
         }
         
