@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class BuildCheckpoints {
 
-    private static final NetworkParameters PARAMS = MainNetParams.get();
+    private static final NetworkParameters params = MainNetParams.get();
     private static final File CHECKPOINTS_FILE = new File("checkpoints");
 
     public static void main(String[] args) throws Exception {
@@ -37,7 +37,7 @@ public class BuildCheckpoints {
 
         // Configure bitcoinj to fetch only headers, not save them to disk, connect to a local fully synced/validated
         // node and to save block headers that are on interval boundaries, as long as they are <1 month old.
-<<<<<<< HEAD
+
         final BlockStore store = new MemoryBlockStore(params);
         final BlockChain chain = new BlockChain(params, store);
         final PeerGroup peerGroup = new PeerGroup(params, chain);
@@ -45,12 +45,7 @@ public class BuildCheckpoints {
         //peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("treasurequarry.com"));
         peerGroup.addAddress(/*InetAddress.getLocalHost()*/InetAddress.getByName("exploretheblocks.com"));
         //peerGroup.addAddress(InetAddress.getLocalHost());
-=======
-        final BlockStore store = new MemoryBlockStore(PARAMS);
-        final BlockChain chain = new BlockChain(PARAMS, store);
-        final PeerGroup peerGroup = new PeerGroup(PARAMS, chain);
-        peerGroup.addAddress(InetAddress.getLocalHost());
->>>>>>> upstream/master
+
         long now = new Date().getTime() / 1000;
         peerGroup.setFastCatchupTimeSecs(now);
 
@@ -61,7 +56,7 @@ public class BuildCheckpoints {
             public void notifyNewBestBlock(StoredBlock block) throws VerificationException {
                 int height = block.getHeight();
 
-<<<<<<< HEAD
+
                 boolean addCheckpoint = false;
                 //For the first set of blocks, the difficulty retarget is every 120 blocks.
                 //Seems like we could increase the interval by 10 fold to reduce the size of the checkpoint file.
@@ -74,12 +69,7 @@ public class BuildCheckpoints {
                 if(height >= CoinDefinition.IFC_RETARGET_SWITCH_BLOCK3 && height % 2880 == 0)
                     addCheckpoint = true;
                 if (addCheckpoint && block.getHeader().getTimeSeconds() <= oneMonthAgo) {
-=======
-                if (height % CoinDefinition.getIntervalCheckpoints() == 0 && block.getHeader().getTimeSeconds() <= oneMonthAgo) {
 
- //               if (height % PARAMS.getInterval() == 0 && block.getHeader().getTimeSeconds() <= oneMonthAgo) {
-
->>>>>>> upstream/master
                     System.out.println(String.format("Checkpointing block %s at height %d",
                             block.getHeader().getHash(), block.getHeight()));
                     checkpoints.put(height, block);
@@ -118,15 +108,10 @@ public class BuildCheckpoints {
         store.close();
 
         // Sanity check the created file.
-        CheckpointManager manager = new CheckpointManager(PARAMS, new FileInputStream(CHECKPOINTS_FILE));
+        CheckpointManager manager = new CheckpointManager(params, new FileInputStream(CHECKPOINTS_FILE));
         checkState(manager.numCheckpoints() == checkpoints.size());
-<<<<<<< HEAD
-        //StoredBlock test = manager.getCheckpointBefore(1348310800);  // Just after block 200,000
-        //checkState(test.getHeight() == 199584);
-        //checkState(test.getHeader().getHashAsString().equals("000000000000002e00a243fe9aa49c78f573091d17372c2ae0ae5e0f24f55b52"));
-=======
 
-        if (PARAMS.getId() == NetworkParameters.ID_MAINNET) {
+        /*if (PARAMS.getId() == NetworkParameters.ID_MAINNET) {
             StoredBlock test = manager.getCheckpointBefore(1390500000); // Thu Jan 23 19:00:00 CET 2014
             checkState(test.getHeight() == 280224);
             checkState(test.getHeader().getHashAsString()
@@ -136,9 +121,8 @@ public class BuildCheckpoints {
             checkState(test.getHeight() == 167328);
             checkState(test.getHeader().getHashAsString()
                     .equals("0000000000035ae7d5025c2538067fe7adb1cf5d5d9c31b024137d9090ed13a9"));
-        }
+        }*/
 
         System.out.println("Checkpoints written to '" + CHECKPOINTS_FILE.getCanonicalPath() + "'.");
->>>>>>> upstream/master
     }
 }
