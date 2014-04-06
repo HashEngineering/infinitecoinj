@@ -20,6 +20,7 @@ public class CoinDefinition {
     public static final String coinURIScheme = "ifc";
     public static final String cryptsyMarketId = "60";
     public static final String cryptsyMarketCurrency = "LTC";
+    public static final String PATTERN_PRIVATE_KEY_START = "6";
 
     public enum CoinPrecision {
         Coins,
