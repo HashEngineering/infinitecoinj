@@ -79,7 +79,7 @@ public class CoinDefinition {
     public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(10000000000L);   // MIN_TX_FEE 100 coins   * 200
     public static final BigInteger DUST_LIMIT =        BigInteger.valueOf(100000000000L);      //   1000 coins
 
-    public static final int PROTOCOL_VERSION = 69002;          //version.h PROTOCOL_VERSION
+    public static final int PROTOCOL_VERSION = 69003;          //version.h PROTOCOL_VERSION
     public static final int MIN_PROTOCOL_VERSION = 69001;        //version.h MIN_PROTO_VERSION
 
 
@@ -88,6 +88,9 @@ public class CoinDefinition {
 
 
     public static final boolean supportsBloomFiltering = false; //Requires PROTOCOL_VERSION 70000 in the client
+    public static boolean supportsIrcDiscovery() {
+        return PROTOCOL_VERSION < 70000;
+    }
 
     public static final int Port    = 9321;       //protocol.h GetDefaultPort(testnet=false)
     public static final int TestPort = 19321;     //protocol.h GetDefaultPort(testnet=true)
@@ -161,8 +164,8 @@ public class CoinDefinition {
           "not supported"
     };
     //from main.h: CAlert::CheckSignature
-    public static final String SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
-    public static final String TESTNET_SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
+    public static final String SATOSHI_KEY = "04494b7bde2ff420c3a1bb2b227ad0ecc00f56a9f475648670434b53d80a33904d0afa84d8259dafbfbebe23e43e28d4baa5677805cb6deb92a6de8c97436b243c";
+    public static final String TESTNET_SATOSHI_KEY = "04494b7bde2ff420c3a1bb2b227ad0ecc00f56a9f475648670434b53d80a33904d0afa84d8259dafbfbebe23e43e28d4baa5677805cb6deb92a6de8c97436b243c";
 
     /** The string returned by getId() for the main, production network where people trade things. */
 
